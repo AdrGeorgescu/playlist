@@ -94,7 +94,8 @@ class App extends Component {
         <div>
           <input 
             value={this.state.playlistId} 
-            onChange={this.updatePlaylistId} />
+            onChange={this.updatePlaylistId}
+            placeholder="Enter a playlist ID"  />
           <button onClick={this.goToPlaylist}> JOIN</button>
         </div>
       );
@@ -104,7 +105,8 @@ class App extends Component {
       <div className="App">
         <input 
           value={this.state.ytUrl} 
-          onChange={this.updateUrl} />
+          onChange={this.updateUrl} 
+          placeholder="Enter full Youtube url" />
         <button onClick={this.addVideo}>
           ADD
         </button>
