@@ -22,6 +22,11 @@
   color: #61dafb;
 }
 
+.side {
+  width: 50%;
+  float: left;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -29,4 +34,40 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.ytSearchResult {
+  content: "";
+  clear: both;
+  text-align: left;
+  padding: 10px 0;
+}
+
+.ytThumbnail {
+  float: left;
+  width: 150px;
+}
+
+.ytContent {
+  float: left;
+}
+
+.ytTitle {
+  font-weight: bold;
+}
+
+.hide {
+  display: none;
+}
+
+button {
+  margin: 0 5px;
+}
+
+.top {
+  padding: 10px 0;
+}
+
+input {
+  padding-top: 5px !important;
 }
