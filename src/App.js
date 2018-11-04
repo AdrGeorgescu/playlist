@@ -25,7 +25,7 @@ class App extends Component {
 
   componentDidMount() {
     if (this.state.playlistId) {
-      this.watchDb(true);
+      this.watchDb();
     }
     window.onfocus = () => {
       document.title = this.pageTitle;
@@ -83,22 +83,21 @@ class App extends Component {
     });
 
     localStorage.setItem('playlistId', this.state.playlistId);
-    this.watchDb(true);
+    this.watchDb();
   }
 
-  watchDb = (firstUpdate) => {
+  watchDb = () => {
     const db = firebase.database().ref('playlists/' + this.state.playlistId);
     
     db.on('value', (snapshot) => {
       const videos = snapshot && snapshot.val() && snapshot.val().videos || [];
-      const unwatchedVideos = firstUpdate ? 0 : ++this.state.unwatchedVideos;
+      const unwatchedVideos = document.hidden ? ++this.state.unwatchedVideos : 0 ;
       
       this.setState({
         videos,
-        unwatchedVideos
+        unwatchedVideos 
       }, () => {
-        document.title = firstUpdate ? this.pageTitle : `(${unwatchedVideos}) ${this.pageTitle}`
-        firstUpdate = false;
+        document.title = document.hidden ? `(${unwatchedVideos}) ${this.pageTitle}` : this.pageTitle;
       });
     });
   }
