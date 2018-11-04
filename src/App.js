@@ -17,12 +17,22 @@ class App extends Component {
     videos: [],
     ytQueryResults: [],
     error: false,
-    showSearchColumn: true
+    showSearchColumn: true,
+    unwatchedVideos: 0
   }
+  
+  pageTitle = '▶ Playlist';
 
   componentDidMount() {
     if (this.state.playlistId) {
-      this.watchDb();
+      this.watchDb(true);
+    }
+    window.onfocus = () => {
+      document.title = this.pageTitle;
+
+      this.setState({
+        unwatchedVideos: 0
+      });
     }
   }
 
@@ -44,7 +54,7 @@ class App extends Component {
     const videoId = this.extractYtIdFromUrl(this.state.ytUrl) || id;
     
     if (videoId) {
-      videos.unshift(videoId);
+      videos.push(videoId);
     
       firebase.database().ref('playlists/' + this.state.playlistId).set({
         videos
@@ -73,16 +83,23 @@ class App extends Component {
     });
 
     localStorage.setItem('playlistId', this.state.playlistId);
-    this.watchDb();
+    this.watchDb(true);
   }
 
-  watchDb = () => {
+  watchDb = (firstUpdate) => {
     const db = firebase.database().ref('playlists/' + this.state.playlistId);
-
+    
     db.on('value', (snapshot) => {
+      const videos = snapshot && snapshot.val() && snapshot.val().videos || [];
+      const unwatchedVideos = firstUpdate ? 0 : ++this.state.unwatchedVideos;
+      
       this.setState({
-        videos: snapshot && snapshot.val() && snapshot.val().videos || []
-      })
+        videos,
+        unwatchedVideos
+      }, () => {
+        document.title = firstUpdate ? this.pageTitle : `(${unwatchedVideos}) ${this.pageTitle}`
+        firstUpdate = false;
+      });
     });
   }
 
@@ -92,7 +109,8 @@ class App extends Component {
       ytUrl: '',
       ytquery: '',
       showPlaylist: false,
-      ytQueryResults: []
+      ytQueryResults: [],
+      unwatchedVideos: 0
     });
 
     localStorage.removeItem('playlistId');
