@@ -71,3 +71,22 @@ button {
 input {
   padding-top: 5px !important;
 }
+
+.videoEntry {
+  text-align: left;
+  padding: 7px;
+}
+
+.videoEntry::before {
+  content: "\25BA"
+}
+
+.videosList {
+  max-height: 400px;
+  overflow-x: auto;
+}
+
+.playing {
+  background-color: #0078e7;
+  color: white;
+}

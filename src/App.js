@@ -18,7 +18,8 @@ class App extends Component {
     ytQueryResults: [],
     error: false,
     showSearchColumn: true,
-    unwatchedVideos: 0
+    unwatchedVideos: 0,
+    currentlyPlaying: ''
   }
   
   pageTitle = '▶ Playlist';
@@ -49,26 +50,50 @@ class App extends Component {
     return (match && match[7].length === 11) ? match[7] : false;
   };
 
-  addVideo = (id) => {
-    const videos = _.cloneDeep(this.state.videos);
-    const videoId = this.extractYtIdFromUrl(this.state.ytUrl) || id;
-    
-    if (videoId) {
-      videos.push(videoId);
-    
-      firebase.database().ref('playlists/' + this.state.playlistId).set({
-        videos
-      });
+  addVideo = (video) => {
+    if (!video && this.state.ytUrl) {
+      const videoId = this.extractYtIdFromUrl(this.state.ytUrl);
 
-      this.setState({
-        ytUrl: '',
-        error: false
-      });
+      if (videoId) {
+        const API = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoId}&key=${process.env.REACT_APP_API_KEY}`;
+
+        fetch(API)
+          .then((response) => response.json())
+          .then((video) => {
+            const vid = video.items[0];
+            const newVideo = {
+              id: vid.id,
+              title: vid.snippet.title
+            };
+
+            this.pushVideo(newVideo);
+        });
+      }
+
+      return;
+    }
+
+    if (video) {
+      this.pushVideo(video);
     } else {
       this.setState({
         error: true
       });
     }
+  }
+
+  pushVideo = (video) => {
+    const videos = _.cloneDeep(this.state.videos);
+    videos.push(video);
+
+    firebase.database().ref('playlists/' + this.state.playlistId).set({
+      videos
+    });
+
+    this.setState({
+      ytUrl: '',
+      error: false
+    });
   }
 
   updatePlaylistId = (evt) => {
@@ -95,7 +120,8 @@ class App extends Component {
       
       this.setState({
         videos,
-        unwatchedVideos 
+        unwatchedVideos,
+        currentlyPlaying: videos.length && videos[0].id
       }, () => {
         document.title = document.hidden ? `(${unwatchedVideos}) ${this.pageTitle}` : this.pageTitle;
       });
@@ -148,6 +174,12 @@ class App extends Component {
     })
   }
 
+  play = (id) => {
+    this.setState({
+      currentlyPlaying: id
+    })
+  }
+
   render() {
     if (!this.state.showPlaylist) {
       return(
@@ -174,7 +206,7 @@ class App extends Component {
               onChange={this.updateUrl} 
               placeholder="Enter full Youtube url" />
             <button 
-              onClick={this.addVideo} 
+              onClick={() => this.addVideo()}
               className="pure-button pure-button-primary">
               ADD
             </button>
@@ -193,7 +225,18 @@ class App extends Component {
             </div>
           </div>
           
-          {this.state.videos.map((videoId) => <Video id={videoId} key={videoId} />)}
+          { this.state.currentlyPlaying ? <Video id={this.state.currentlyPlaying} /> : false }
+
+          <div className="videosList">
+          {
+            this.state.videos.map((video) =>
+              <div
+                className={"videoEntry " + (video.id === this.state.currentlyPlaying ? "playing" : "")}
+                onClick={() => this.play(video.id)}>
+                  {video.title}
+              </div>)
+          }
+          </div>
         </div>
         
         <div className={`ytSearch side ${this.state.showColumnClassName}`}>
@@ -215,7 +258,7 @@ class App extends Component {
 
           <Youtube 
             results={this.state.ytQueryResults} 
-            addToPlaylist={(videoId) => this.addVideo(videoId)} />
+            addToPlaylist={(video) => this.addVideo(video)} />
         </div>
       </div>
     );

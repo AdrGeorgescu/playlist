@@ -14,7 +14,7 @@ class Youtube extends Component {
                 <div className="ytTitle">
                     <button 
                         className="pure-button pure-button-primary"
-                        onClick={() => this.props.addToPlaylist(video.id)}>
+                        onClick={() => this.props.addToPlaylist(video)}>
                         +
                     </button>
                     {video.channelTitle}
