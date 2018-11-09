@@ -3,8 +3,14 @@ import YouTube from 'react-youtube';
 
 class Video extends Component {
 
-  _onReady(event) {
+  _onReady = (event) => {
     event.target.pauseVideo();
+  }
+
+  _onStateChanged = (event) => {
+    if (event.data === 0) {
+      this.props.playNext();
+    }
   }
 
   render() {
@@ -12,7 +18,7 @@ class Video extends Component {
       height: '390',
       width: '640',
       playerVars: {
-        autoplay: 0
+        autoplay: 1
       }
     };
     return (
@@ -21,6 +27,7 @@ class Video extends Component {
           videoId={this.props.id}
           opts={opts}
           onReady={this._onReady}
+          onStateChange={this._onStateChanged}
         />
       </div>
     );

@@ -13,7 +13,7 @@ class App extends Component {
     ytquery: '',
     showColumnClassName: '',
     playlistId: localStorage.getItem('playlistId') || '',
-    showPlaylist: localStorage.getItem('playlistId')  ? true : false,
+    showPlaylist: !!localStorage.getItem('playlistId'),
     videos: [],
     ytQueryResults: [],
     error: false,
@@ -28,6 +28,7 @@ class App extends Component {
     if (this.state.playlistId) {
       this.watchDb();
     }
+
     window.onfocus = () => {
       document.title = this.pageTitle;
 
@@ -55,9 +56,9 @@ class App extends Component {
       const videoId = this.extractYtIdFromUrl(this.state.ytUrl);
 
       if (videoId) {
-        const API = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoId}&key=${process.env.REACT_APP_API_KEY}`;
+        const videInfoEndpoint = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoId}&key=${process.env.REACT_APP_API_KEY}`;
 
-        fetch(API)
+        fetch(videInfoEndpoint)
           .then((response) => response.json())
           .then((video) => {
             const vid = video.items[0];
@@ -121,7 +122,7 @@ class App extends Component {
       this.setState({
         videos,
         unwatchedVideos,
-        currentlyPlaying: videos.length && videos[0].id
+        currentlyPlaying: this.state.currentlyPlaying ? this.state.currentlyPlaying : videos.length && videos[0].id
       }, () => {
         document.title = document.hidden ? `(${unwatchedVideos}) ${this.pageTitle}` : this.pageTitle;
       });
@@ -154,13 +155,13 @@ class App extends Component {
   }
 
   searchYt = () => {
-    var opts = {
+    const opts = {
       maxResults: 10,
       key: process.env.REACT_APP_YT_APY_KEY
     };
      
     ysearch(this.state.ytquery, opts, (err, ytQueryResults) => {
-      if(err) return console.log(err);
+      if (err) return console.log(err);
 
       this.setState({
         ytQueryResults
@@ -177,7 +178,17 @@ class App extends Component {
   play = (id) => {
     this.setState({
       currentlyPlaying: id
-    })
+    });
+  }
+
+  playNext = () => {
+    const playingVideoIndex = this.state.videos.findIndex((vid) => vid.id === this.state.currentlyPlaying);
+
+    if (playingVideoIndex + 1 < this.state.videos.length) {
+      this.setState({
+        currentlyPlaying: this.state.videos[playingVideoIndex + 1].id
+      });
+    }
   }
 
   render() {
@@ -225,7 +236,11 @@ class App extends Component {
             </div>
           </div>
           
-          { this.state.currentlyPlaying ? <Video id={this.state.currentlyPlaying} /> : false }
+          {
+            this.state.currentlyPlaying
+              ? <Video id={this.state.currentlyPlaying} playNext={() => this.playNext()} />
+              : false
+          }
 
           <div className="videosList">
           {
