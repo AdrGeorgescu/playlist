@@ -20,7 +20,8 @@ class App extends Component {
     showSearchColumn: true,
     unwatchedVideos: 0,
     currentlyPlaying: '',
-    demoId: ''
+    demoId: '',
+    fullWidthFirstColumn: ''
   }
   
   pageTitle = '▶ Playlist';
@@ -177,7 +178,8 @@ class App extends Component {
 
   hideSearchColumn = () => {
     this.setState({
-      showColumnClassName: this.state.showColumnClassName ? '' : 'hide'
+      showColumnClassName: this.state.showColumnClassName ? '' : 'hide',
+      fullWidthFirstColumn: this.state.fullWidthFirstColumn ? '' : 'fullWidth'
     })
   }
 
@@ -217,7 +219,7 @@ class App extends Component {
 
     return (
       <div className="App pure-form">
-        <div className="playlist side">
+        <div className={`playlist side ${this.state.fullWidthFirstColumn}`}>
           <div className="top">
             <form onSubmit={(e) => { this.addVideo(); e.preventDefault();}}>
               <input

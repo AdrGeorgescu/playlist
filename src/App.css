@@ -112,3 +112,12 @@ input {
 form {
   padding: 10px 0;
 }
+
+.fullWidth {
+  width: 100%;
+}
+
+.fullWidth .videosList {
+  width: 720px;
+  margin: 0 auto;
+}
