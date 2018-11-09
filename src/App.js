@@ -137,6 +137,7 @@ class App extends Component {
       playlistId: '',
       ytUrl: '',
       ytquery: '',
+      demoId: '',
       showPlaylist: false,
       ytQueryResults: [],
       unwatchedVideos: 0
