@@ -225,6 +225,7 @@ class App extends Component {
               <input
                 value={this.state.ytUrl}
                 onChange={this.updateUrl}
+                className="addYtUrl"
                 placeholder="Enter full Youtube url" />
               <button className="pure-button pure-button-primary">
                 ADD

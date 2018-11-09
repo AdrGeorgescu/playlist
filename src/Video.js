@@ -15,8 +15,6 @@ class Video extends Component {
 
   render() {
     const opts = {
-      height: '390',
-      width: '640',
       playerVars: {
         autoplay: 1
       }
@@ -28,6 +26,7 @@ class Video extends Component {
           opts={opts}
           onReady={this._onReady}
           onStateChange={this._onStateChanged}
+          className="player"
         />
       </div>
     );

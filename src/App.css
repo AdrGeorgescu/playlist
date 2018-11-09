@@ -121,3 +121,20 @@ form {
   width: 720px;
   margin: 0 auto;
 }
+
+.player {
+  width: 640px;
+}
+
+@media only screen and (max-width: 720px)  {
+  .player {
+    width: 100%;
+  }
+  .fullWidth .videosList {
+    width: 100%;
+  }
+  .addYtUrl {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
