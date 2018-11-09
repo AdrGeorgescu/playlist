@@ -90,3 +90,7 @@ input {
   background-color: #0078e7;
   color: white;
 }
+
+form {
+  padding: 10px 0;
+}

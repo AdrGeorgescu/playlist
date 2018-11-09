@@ -103,7 +103,9 @@ class App extends Component {
     });
   }
 
-  goToPlaylist = () => {
+  goToPlaylist = (e) => {
+    e.preventDefault();
+
     this.setState({
       showPlaylist: true
     });
@@ -154,7 +156,9 @@ class App extends Component {
     });
   }
 
-  searchYt = () => {
+  searchYt = (e) => {
+    e.preventDefault();
+
     const opts = {
       maxResults: 10,
       key: process.env.REACT_APP_YT_APY_KEY
@@ -194,17 +198,18 @@ class App extends Component {
   render() {
     if (!this.state.showPlaylist) {
       return(
-        <div className="App pure-form top">
-          <input 
-            value={this.state.playlistId} 
-            onChange={this.updatePlaylistId}
-            placeholder="Enter a playlist ID"  />
-          <button 
-            className="pure-button pure-button-primary"
-            onClick={this.goToPlaylist}>
-            JOIN
-          </button>
-        </div>
+        <form onSubmit={this.goToPlaylist}>
+          <div className="App pure-form top">
+            <input
+              value={this.state.playlistId}
+              onChange={this.updatePlaylistId}
+              placeholder="Enter a playlist ID"  />
+            <button
+              className="pure-button pure-button-primary">
+              JOIN
+            </button>
+          </div>
+        </form>
       );
     }
 
@@ -212,28 +217,31 @@ class App extends Component {
       <div className="App pure-form">
         <div className="playlist side">
           <div className="top">
-            <input 
-              value={this.state.ytUrl} 
-              onChange={this.updateUrl} 
-              placeholder="Enter full Youtube url" />
-            <button 
-              onClick={() => this.addVideo()}
-              className="pure-button pure-button-primary">
-              ADD
-            </button>
-            <button 
-              className="pure-button pure-button-primary"
-              onClick={this.switchPlaylist}>
-              Switch Playlist
-            </button>
-            <button 
-              className="pure-button pure-button-primary"
-              onClick={this.hideSearchColumn} >
-              Show Youtube Search
-            </button>
-            <div>
-              {this.state.error ? <div>Invalid Id</div> : undefined}
-            </div>
+            <form onSubmit={(e) => { this.addVideo(); e.preventDefault();}}>
+              <input
+                value={this.state.ytUrl}
+                onChange={this.updateUrl}
+                placeholder="Enter full Youtube url" />
+              <button className="pure-button pure-button-primary">
+                ADD
+              </button>
+
+              <button
+                className="pure-button pure-button-primary"
+                type="button"
+                onClick={this.switchPlaylist}>
+                Switch Playlist
+              </button>
+              <button
+                className="pure-button pure-button-primary"
+                type="button"
+                onClick={this.hideSearchColumn} >
+                Show Youtube Search
+              </button>
+              <div>
+                {this.state.error ? <div>Invalid Id</div> : undefined}
+              </div>
+            </form>
           </div>
           
           {
@@ -256,19 +264,21 @@ class App extends Component {
         
         <div className={`ytSearch side ${this.state.showColumnClassName}`}>
           <div className="top">
-            <input 
-              value={this.state.ytquery} 
-              onChange={this.updateQuery} />
-            <button 
-              className="pure-button pure-button-primary"
-              onClick={this.searchYt}>
-              Search Youtube
-            </button>
-            <button 
-              className="pure-button pure-button-primary"
-              onClick={this.clearSearchYt}>
-              Clear
-            </button>
+            <form onSubmit={this.searchYt}>
+              <input
+                value={this.state.ytquery}
+                onChange={this.updateQuery} />
+              <button
+                className="pure-button pure-button-primary">
+                Search Youtube
+              </button>
+              <button
+                className="pure-button pure-button-primary"
+                type="button"
+                onClick={this.clearSearchYt}>
+                Clear
+              </button>
+            </form>
           </div>
 
           <Youtube 
