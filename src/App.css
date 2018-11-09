@@ -52,7 +52,13 @@
   float: left;
 }
 
+.ytDesc {
+  padding: 7px 0;
+  width: 640px;
+}
+
 .ytTitle {
+  padding: 5px 0;
   font-weight: bold;
 }
 
@@ -75,6 +81,14 @@ input {
 .videoEntry {
   text-align: left;
   padding: 7px;
+  margin: 0 10px;
+}
+
+.videoImage {
+  float: left;
+  max-height: 300px;
+  max-width: 640px;
+  clear: both;
 }
 
 .videoEntry::before {
@@ -84,6 +98,10 @@ input {
 .videosList {
   max-height: 400px;
   overflow-x: auto;
+}
+
+.video {
+  clear: both;
 }
 
 .playing {

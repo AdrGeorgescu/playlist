@@ -19,7 +19,8 @@ class App extends Component {
     error: false,
     showSearchColumn: true,
     unwatchedVideos: 0,
-    currentlyPlaying: ''
+    currentlyPlaying: '',
+    demoId: ''
   }
   
   pageTitle = '▶ Playlist';
@@ -281,9 +282,12 @@ class App extends Component {
             </form>
           </div>
 
+          { this.state.demoId ? <Video id={this.state.demoId} /> : false }
+
           <Youtube 
-            results={this.state.ytQueryResults} 
-            addToPlaylist={(video) => this.addVideo(video)} />
+            results={this.state.ytQueryResults}
+            addToPlaylist={(video) => this.addVideo(video)}
+            playDemo={(id) => this.setState({ demoId: id})}/>
         </div>
       </div>
     );
