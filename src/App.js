@@ -141,7 +141,8 @@ class App extends Component {
       demoId: '',
       showPlaylist: false,
       ytQueryResults: [],
-      unwatchedVideos: 0
+      unwatchedVideos: 0,
+      currentlyPlaying: ''
     });
 
     localStorage.removeItem('playlistId');
