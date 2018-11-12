@@ -6,24 +6,25 @@ import firebase from 'firebase';
 import ysearch from 'youtube-search';
 import Youtube from './Youtube';
 
+const initialState = {
+  ytUrl: '',
+  ytquery: '',
+  showColumnClassName: '',
+  playlistId: localStorage.getItem('playlistId') || '',
+  showPlaylist: !!localStorage.getItem('playlistId'),
+  videos: [],
+  ytQueryResults: [],
+  error: false,
+  showSearchColumn: true,
+  unwatchedVideos: 0,
+  currentlyPlaying: '',
+  demoId: '',
+  fullWidthFirstColumn: ''
+};
+
 class App extends Component {
 
-  state = {
-    ytUrl: '',
-    ytquery: '',
-    showColumnClassName: '',
-    playlistId: localStorage.getItem('playlistId') || '',
-    showPlaylist: !!localStorage.getItem('playlistId'),
-    videos: [],
-    ytQueryResults: [],
-    error: false,
-    showSearchColumn: true,
-    unwatchedVideos: 0,
-    currentlyPlaying: '',
-    demoId: '',
-    fullWidthFirstColumn: ''
-  }
-  
+  state = initialState;
   pageTitle = '▶ Playlist';
 
   componentDidMount() {
@@ -134,18 +135,8 @@ class App extends Component {
   }
 
   switchPlaylist = () => {
-    this.setState({
-      playlistId: '',
-      ytUrl: '',
-      ytquery: '',
-      demoId: '',
-      showPlaylist: false,
-      ytQueryResults: [],
-      unwatchedVideos: 0,
-      currentlyPlaying: ''
-    });
-
     localStorage.removeItem('playlistId');
+    this.setState(initialState);
   }
 
   updateQuery = (evt) => {

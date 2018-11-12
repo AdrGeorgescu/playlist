@@ -19,7 +19,7 @@ class Youtube extends Component {
                     onClick={() => this.props.addToPlaylist(video)}>
                     +
                   </button>
-                  {video.channelTitle}
+                  {video.title}
                 </div>
                 <div className="ytDesc">
                   {video.description}
