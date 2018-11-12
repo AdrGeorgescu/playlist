@@ -156,7 +156,8 @@ class App extends Component {
 
     const opts = {
       maxResults: 10,
-      key: process.env.REACT_APP_YT_APY_KEY
+      key: process.env.REACT_APP_YT_APY_KEY,
+      type: 'video'
     };
      
     ysearch(this.state.ytquery, opts, (err, ytQueryResults) => {
