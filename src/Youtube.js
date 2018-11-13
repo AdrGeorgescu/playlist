@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import Video from './Video';
 
 class Youtube extends Component {
   render() {
@@ -28,7 +27,8 @@ class Youtube extends Component {
               <img
                 src={video.thumbnails.high.url}
                 className="videoImage"
-                onClick={() => this.props.playDemo(video.id)}/>
+                alt={video.title}
+                onClick={() => this.props.playDemo(video.id)} />
             </div>
           )
         })}

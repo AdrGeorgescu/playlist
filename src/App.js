@@ -48,7 +48,7 @@ class App extends Component {
   }
 
   extractYtIdFromUrl = (url) => {
-    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
     const match = url.match(regExp);
     
     return (match && match[7].length === 11) ? match[7] : false;
@@ -121,8 +121,9 @@ class App extends Component {
     const db = firebase.database().ref('playlists/' + this.state.playlistId);
     
     db.on('value', (snapshot) => {
-      const videos = snapshot && snapshot.val() && snapshot.val().videos || [];
-      const unwatchedVideos = document.hidden ? ++this.state.unwatchedVideos : 0 ;
+      const snapVideos = snapshot && snapshot.val() && snapshot.val().videos;
+      const videos = snapVideos || [];
+      const unwatchedVideos = document.hidden ? this.state.unwatchedVideos + 1 : 0 ;
       
       this.setState({
         videos,
